@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Tarn Clicker</title>
+    <meta charset="UTF-8" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/imgs/favicons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/imgs/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/imgs/favicons/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+</head>
+
+<body>
+    <div id="tarn-section">
+        <p id="petting-hand">🫳</p>
+
+        <div id="pets">
+            <p id="pet-count-text"></p>
+            <p id="pet-ps-text"></p>
+        </div>
+
+        <button id="tarn-button" type="button"><img id="tarn-image" src="./imgs/tarn_icon_normal.png" alt="Tarn-ati0n" width="300" height="300"></button>
+        <div id="glow"></div>
+    </div>
+
+    <div id="middle-section">
+        <div id="settings-panel">
+            <button id="settings-open-btn" type="button">
+                <i class="bi bi-gear-fill" style="color: white;"></i>
+            </button>
+        </div>
+        <canvas id="upgrades-canvas"></canvas>
+    </div>
+
+    <div id="shops-section">
+        <div id="shops-section-title-box">
+            <p id="shops-section-title">Helping Hands</p>
+        </div>
+        <!--
+            Here the shops are generated automatically
+        -->
+    </div>
+    <div id="mobile-message" style="display: none;">
+        <p>Sorry, this website doesn't work well on mobile.</p>
+    </div>
+
+    <div id="settings-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Settings</h2>
+                <button id="settings-close-btn" type="button" class="close-btn">×</button>
+            </div>
+
+            <div class="modal-body">
+                <div class="setting-item checkbox">
+                    <label for="pic-tarn">Who to pet?</label>
+                    <input type="radio" id="pic-tarn" checked name="picture_option" value="tarn">
+                    <label for="pic-tarn">Tarn</label>
+                    <input type="radio" id="pic-shavie" name="picture_option" value="shavie">
+                    <label for="pic-shavie">Shavie</label>
+                    <input type="radio" id="pic-owl" name="picture_option" value="owl">
+                    <label for="pic-owl">Owl</label>
+                </div>
+
+                <!-- <div class="setting-item checkbox"> -->
+                <!--     <input type="checkbox" id="confirm-buildings"> -->
+                <!--     <label for="confirm-buildings">Confirm before buying buildings</label> -->
+                <!-- </div> -->
+
+                <div class="setting-item">
+                    <button id="reset-game-btn" class="danger-btn">Reset Game (Permanent!)</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="module" src="src/main.js"></script>
+</body>
+
+</html>
