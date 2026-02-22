@@ -1,4 +1,5 @@
 import { game, elements, updateImageBox, formatNumber, getBuildingProduction } from './gameState.js';
+import { drawBackground, drawCircle } from './canvas.js';
 
 export function initializeRender() {
     game.pettingImageBox = elements.tarn_img_element.getBoundingClientRect();
@@ -16,14 +17,13 @@ export function render() {
     elements.petCount.innerHTML = formatNumber(game.pets);
     elements.petPs.innerHTML = `Per second: ${Math.floor(game.petsPerSecond)}`;
 
-    if (!game.petting) {
-        if (["tarn", "shavie", "owl"].includes(game.img))
-            elements.tarn_img_element.src = `./imgs/${game.img}_icon_normal.png`;
-        else alert("HEY SOMETHINGS WRONG");
-    }
+    drawBackground("#181818c0");
 
     // Update all shop items
-    game.buildings.forEach(building => {
+    game.buildings.forEach(updateShopItems);
+}
+
+function updateShopItems(building) {
         const shopEl = document.querySelector(`.shop.${building.id}-shop`);
 
         if (!shopEl) return; // not rendered yet → skip
@@ -41,7 +41,6 @@ export function render() {
         } else {
             shopEl.classList.add("disabled");
         }
-    });
 }
 
 export function updatePettingHandLocation() {
@@ -51,10 +50,10 @@ export function updatePettingHandLocation() {
     const centerX = rect.left + rect.width / 2;
     const centerY = rect.top  + rect.height / 2;
 
-    const THETA = 30 / 360 * 2 * Math.PI;
+    const THETA = 30 / 360 * 2 * Math.PI; // Icon is rotated 30 degrees but Math.cos/Math.sin take radians
     const WIDTH = elements.pettingHand.getBoundingClientRect().width;
     const HEIGHT = elements.pettingHand.getBoundingClientRect().height;
-    const NEW_WIDTH = WIDTH * Math.cos(THETA) + HEIGHT * Math.sin(THETA);
+    const NEW_WIDTH = WIDTH * Math.cos(THETA) + HEIGHT * Math.sin(THETA); // The long width after rotation
     const NEW_HEIGHT = HEIGHT * Math.cos(THETA) + WIDTH * Math.sin(THETA);
 
     const offsets = {

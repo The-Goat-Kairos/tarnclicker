@@ -1,10 +1,14 @@
-import { game, elements, updatePrice, calculateTotalPPS } from './gameState.js';
+import { game, elements, updatePrice, calculateTotalPPS, audios } from './gameState.js';
 import { render } from './render.js';
 
 export async function pet() {
     game.pets += game.petsPerClick;
     game.petting = true;
     render();
+
+    audios.clickSoundEffect.play().catch(error => {
+        console.error("[ERROR]: playing sound: ", error);
+    });
 
     // Animation
     elements.pettingHand.style.transition = "none";

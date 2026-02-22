@@ -31,6 +31,7 @@ body {
     overflow: hidden;
 }
 
+#audio-prompt,
 #mobile-message {
     position: fixed;
     top: 0;
@@ -173,10 +174,12 @@ button {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
+    position: relative;
 }
 
 #settings-panel {
     display: flex;
+    height: 7%;
     justify-content: center;
     align-items: center;
     padding-top: 0.5em;
@@ -185,10 +188,23 @@ button {
     background: linear-gradient(to bottom, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.35) 100%);
 }
 
+#particles-js,
 #upgrades-canvas {
-    flex-grow: 1;
+    position: absolute;
+    top: calc(7% + 0.5em + 10px);
+    left: 0;
+    width: 100%;
+    height: 100%;
 }
 
+#particles-js {
+    z-index: 1;
+    /* pointer-events: none; */
+}
+
+#upgrades-canvas {
+    z-index: 2;
+}
 /*
 *   ======================================================================
 *   SHOPS SECTION

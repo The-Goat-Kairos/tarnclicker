@@ -32,6 +32,7 @@
                 <i class="bi bi-gear-fill" style="color: white;"></i>
             </button>
         </div>
+        <div id="particles-js"></div>
         <canvas id="upgrades-canvas"></canvas>
     </div>
 
@@ -76,7 +77,20 @@
             </div>
         </div>
     </div>
-    <script type="module" src="src/main.js"></script>
+
+    <div id="audio-prompt" style="display: none;">
+        <p>Please enable audio playback for a better experience. Press the button below to start background music.</p>
+        <button id="enable-audio-btn">Enable Audio</button>
+    </div>
+
+    <script defer type="module" src="src/main.js"></script>
+    <script src="src/particles.js"></script>
+
+    <script>
+        particlesJS.load('particles-js', 'particles.json', function() {
+            console.log('callback - particles.js config loaded');
+        });
+    </script>
 </body>
 
 </html>
