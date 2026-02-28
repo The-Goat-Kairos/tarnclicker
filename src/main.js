@@ -3,7 +3,7 @@ import { render, initializeRender, updatePettingHandLocation } from './render.js
 import { initializeInput } from './gameInput.js';
 import { initializeBuildings } from './buildings.js';
 import { initializeSettings } from './settings.js';
-import { initializeCanvas, drawBackground } from './canvas.js';
+import { initializeCanvas } from './canvas.js';
 
 let lastTime = performance.now();
 
@@ -12,8 +12,6 @@ function gameLoop(currentTime) {
     lastTime = currentTime;
 
     game.pets += game.petsPerSecond * delta;
-
-    //drawBackground("#ff0000");
 
     render();
     updatePettingHandLocation();
@@ -26,8 +24,8 @@ initializeSettings();
 initializeInput();
 initializeBuildings();
 initializeRender();
-initializeCanvas("upgrades-canvas");
-requestAnimationFrame(gameLoop);
+initializeCanvas("upgrades-canvas")
+requestAnimationFrame(gameLoop)
 
 
 // =============================================

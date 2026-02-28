@@ -1,5 +1,5 @@
 import { game, elements, updateImageBox, formatNumber, getBuildingProduction } from './gameState.js';
-import { drawBackground, drawCircle } from './canvas.js';
+import { drawScreen } from './canvas.js';
 
 export function initializeRender() {
     game.pettingImageBox = elements.tarn_img_element.getBoundingClientRect();
@@ -17,7 +17,7 @@ export function render() {
     elements.petCount.innerHTML = formatNumber(game.pets);
     elements.petPs.innerHTML = `Per second: ${Math.floor(game.petsPerSecond)}`;
 
-    drawBackground("#181818c0");
+    drawScreen();
 
     // Update all shop items
     game.buildings.forEach(updateShopItems);

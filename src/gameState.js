@@ -112,20 +112,20 @@ export const audios = {
 }
 
 export function initializeAudios() {
-    audios.backgroundSlimeAdventure = new Audio("/audio/slime-adventure.mp3");
-    audios.backgroundSlimeAdventure.volume = 0.15;
-    audios.backgroundSlimeAdventure.loop = true;
-    audios.backgroundSlimeAdventure.play().then(() => {
-    }).catch(_ => {
-        document.getElementById('audio-prompt').style.display = 'block';
-
-        document.getElementById('enable-audio-btn').addEventListener('click', function() {
-            document.getElementById('audio-prompt').style.display = 'none';
-            audios.backgroundSlimeAdventure.play().catch(err => {
-                console.error('Audio still cannot be played:', err);
-            });
-        });
-    });
+    // audios.backgroundSlimeAdventure = new Audio("/audio/slime-adventure.mp3");
+    // audios.backgroundSlimeAdventure.volume = 0.15;
+    // audios.backgroundSlimeAdventure.loop = true;
+    // audios.backgroundSlimeAdventure.play().then(() => {
+    // }).catch(_ => {
+    //     document.getElementById('audio-prompt').style.display = 'block';
+    //
+    //     document.getElementById('enable-audio-btn').addEventListener('click', function() {
+    //         document.getElementById('audio-prompt').style.display = 'none';
+    //         audios.backgroundSlimeAdventure.play().catch(err => {
+    //             console.error('Audio still cannot be played:', err);
+    //         });
+    //     });
+    // });
 
     audios.clickSoundEffect = new Audio("/audio/soft-click-button.mp3");
     audios.clickSoundEffect.volume = 0.2;
