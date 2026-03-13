@@ -41,9 +41,9 @@ export async function tryBuyBuilding(buildingId, buildingElement) {
     if (!building) return;
 
     if (game.pets < building.currentPrice) {
-        buildingElement.style.backgroundColor = "#3d0c0c";
+        buildingElement.classList.add("not-enough-money");
         setTimeout(() => {
-            buildingElement.style.backgroundColor = "#181818";
+            buildingElement.classList.remove("not-enough-money");
         }, 160);
         return;
     }

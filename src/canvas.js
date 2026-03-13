@@ -9,6 +9,10 @@ export const viewState = {
     nodes: [],
     edges: [],
 };
+let isDragging = false;
+let lastMouseX = 0;
+let lastMouseY = 0;
+
 let treeDirty = true;
 
 export function initializeCanvas(selectorId) {
@@ -16,6 +20,13 @@ export function initializeCanvas(selectorId) {
     canvas.context = canvas.element.getContext("2d");
     canvas.width = canvas.element.clientWidth;
     canvas.height = canvas.element.clientHeight;
+
+    canvas.element.addEventListener('mousedown', onMouseDown);
+    canvas.element.addEventListener('mousemove', onMouseMove);
+    canvas.element.addEventListener('mouseup', onMouseUp);
+    canvas.element.addEventListener('mouseleave', onMouseUp);
+    canvas.element.addEventListener('click', onClick);
+    canvas.element.addEventListener('wheel', onWheel, { passive: false });
 
     resizeCanvas();
 
@@ -26,10 +37,33 @@ export function initializeCanvas(selectorId) {
 
 export function drawScreen() {
     if (!canvas.element || !canvas.context) return;
+    const ctx = canvas.context;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawBackground("#181818C0");
+
+    ctx.save();
+    ctx.translate(canvas.width / 2, canvas.height / 2);
+    ctx.scale(viewState.camera.zoom, viewState.camera.zoom);
+    ctx.translate(-canvas.width / 2, -canvas.height / 2);
+
+    ctx.translate(viewState.camera.x, viewState.camera.y);
 
     if (treeDirty) {
         const {nodes, edges} = buildRenderableTree();
+        nodes.forEach(node => {
+            const tempCtx = canvas.context;
+            tempCtx.font = "bold 18px Arial";
+            const titleW = tempCtx.measureText(node.name).width;
+
+            tempCtx.font = "14px Arial";
+            const costW = tempCtx.measureText(`Cost: ${node.cost.toLocaleString()}`).width;
+            const descW = node.description ? tempCtx.measureText(node.description).width : 0;
+
+            const contentW = Math.max(titleW, costW, descW) + 32;
+            node.w = Math.max(180, contentW);
+            node.h = 40 + (node.description ? 60 : 40); // rough
+        });
+
         viewState.nodes = nodes;
         viewState.edges = edges;
         computeNodePositions(nodes, edges, {
@@ -41,8 +75,6 @@ export function drawScreen() {
 
         centerTreeOnCanvas(nodes);
     }
-
-    const ctx = canvas.context;
 
     // Draw dotted edges first (background layer)
     ctx.strokeStyle = "#666";
@@ -64,6 +96,8 @@ export function drawScreen() {
     for (const node of viewState.nodes) {
         drawUpgradeNode(node);
     }
+
+    ctx.restore();
 }
 
 // =======================================================================
@@ -222,4 +256,113 @@ function centerTreeOnCanvas(nodes) {
         n.centerX += offsetX;
         n.centerY += offsetY;
     });
+}
+
+//========================================================================
+// Mouse Handlers
+//========================================================================
+
+function onMouseDown(e) {
+    if (e.button !== 0) return;
+    isDragging = true;
+    lastMouseX = e.offsetX;
+    lastMouseY = e.offsetY;
+
+    canvas.element.style.cursor = 'grabbing';
+}
+
+function onMouseMove(e) {
+    const rect = canvas.element.getBoundingClientRect();
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+
+    if (isDragging) {
+        const dx = e.offsetX - lastMouseX;
+        const dy = e.offsetY - lastMouseY;
+
+        viewState.camera.x += dx / viewState.camera.zoom;
+        viewState.camera.y += dy / viewState.camera.zoom;
+
+        lastMouseX = e.offsetX;
+        lastMouseY = e.offsetY;
+
+        drawScreen();
+        return;
+    }
+
+    const hoveredId = getUpgradeAtPoint(mouseX, mouseY);
+    const prevHovered = viewState.hoveredUpgradeId;
+    if (hoveredId !== prevHovered) {
+        viewState.hoveredUpgradeId = hoveredId;
+
+        if (hoveredId) canvas.element.style.cursor = "pointer";
+        else canvas.element.style.cursor = 'default';
+    }
+}
+
+function onMouseUp() {
+    isDragging = false;
+
+    canvas.element.style.cursor = 'default';
+}
+
+function onWheel(e) {
+    e.preventDefault();
+
+    const zoomSpeed = 1.15;
+    const direction = e.deltaY < 0 ? 1 : -1;
+    const factor = direction > 0 ? zoomSpeed : 1 / zoomSpeed;
+
+    const mouseX = e.offsetX;
+    const mouseY = e.offsetY;
+
+    const wx = (mouseX - canvas.width  / 2 - viewState.camera.x) / viewState.camera.zoom;
+    const wy = (mouseY - canvas.height / 2 - viewState.camera.y) / viewState.camera.zoom;
+
+    viewState.camera.zoom *= factor;
+    viewState.camera.zoom  = Math.max(0.25, Math.min(6, viewState.camera.zoom));
+
+    viewState.camera.x = mouseX - canvas.width  / 2 - wx * viewState.camera.zoom;
+    viewState.camera.y = mouseY - canvas.height / 2 - wy * viewState.camera.zoom;
+}
+
+function onClick(e) {
+    if (isDragging) return;
+
+    const rect = canvas.element.getBoundingClientRect();
+    const mouseX = e.offsetX;
+    const mouseY = e.offsetY;
+
+    const clickedId = getUpgradeAtPoint(mouseX, mouseY);
+    if (!clickedId) return;
+    console.log(clickedId);
+
+    // const upgrade = UPGRADES[clickedId];
+    // if (!upgrade) return;
+
+    // if (game.upgrades?.[clickedId]?.purchased) {
+    //     console.log("Im not sure this code is correct");
+    // }
+}
+
+function getUpgradeAtPoint(mouseX, mouseY) {
+    const zoom = viewState.camera.zoom;
+    const cx = canvas.width / 2;
+    const cy = canvas.height / 2;
+
+    const worldX = (mouseX - cx - viewState.camera.x) / zoom + cx;
+    const worldY = (mouseY - cy - viewState.camera.y) / zoom + cy;
+
+    for (const node of viewState.nodes) {
+        if (
+            worldX >= node.x &&
+            worldX <= node.x + node.w &&
+            worldY >= node.y &&
+            worldY <= node.y + node.h
+        ) {
+            return node.id;
+        }
+    }
+
+    return null;
 }

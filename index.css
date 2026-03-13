@@ -261,6 +261,10 @@ button {
     border-style: outset;
 }
 
+.not-enough-money {
+    background-color: #3d0c0c !important;
+}
+
 .disabled {
     opacity: 0.8;
     background-color: #050505;

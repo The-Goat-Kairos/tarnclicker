@@ -136,8 +136,10 @@ export function formatNumber(n) {
 }
 
 export function setImg(new_image) {
-    if (["owl", "shavie", "owl"].includes(new_image))
+    if (["tarn", "shavie", "owl"].includes(new_image)) {
         game.img = new_image;
+        elements.tarn_img_element.src = `./imgs/${game.img}_icon_normal.png`;
+    }
     else alert("SOMETHINGS UP");
 }
 

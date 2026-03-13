@@ -33,17 +33,15 @@ export function initializeSettings() {
     elements.tarnImgSettingsBtn.addEventListener("click", () => {
         setImg("tarn");
         updatePettingHandLocation();
-        render();
     });
     elements.shavieImgSettingsBtn.addEventListener("click", () => {
         setImg("shavie");
+        console.log("this happened");
         updatePettingHandLocation();
-        render();
     });
     elements.owlImgSettingsBtn.addEventListener("click", () => {
         setImg("owl");
         updatePettingHandLocation();
-        render();
     });
 
     document.getElementById("reset-game-btn")?.addEventListener("click", () => {
