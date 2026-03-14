@@ -329,7 +329,7 @@ function onWheel(e) {
 function onClick(e) {
     if (isDragging) return;
 
-    const rect = canvas.element.getBoundingClientRect();
+    // const rect = canvas.element.getBoundingClientRect();
     const mouseX = e.offsetX;
     const mouseY = e.offsetY;
 
